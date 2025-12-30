@@ -3,65 +3,89 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>מערכת ניהול מורה - גרסה 2.0</title>
+    <title>ניהול משימות ראלי מטו"ס</title>
     <style>
-        :root { --primary: #4f46e5; --accent: #10b981; --danger: #f43f5e; --bg: #f8fafc; }
-        body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); margin: 0; padding: 20px; direction: rtl; }
-        .container { max-width: 800px; margin: auto; }
-        .card { background: white; padding: 25px; border-radius: 16px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        :root { 
+            --primary: #4f46e5; 
+            --bg: #1e1b4b; /* צבע רקע כהה וחדש */
+            --accent: #10b981; 
+            --edit: #f59e0b; 
+            --danger: #ef4444; 
+            --card-bg: rgba(255, 255, 255, 0.95);
+        }
+        body { 
+            font-family: 'Segoe UI', sans-serif; 
+            background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%); /* רקע מדורג מעניין */
+            background-attachment: fixed;
+            margin: 0; 
+            padding: 20px; 
+            direction: rtl; 
+            text-align: right; 
+            min-height: 100vh;
+        }
+        .card { 
+            background: var(--card-bg); 
+            padding: 30px; 
+            border-radius: 20px; 
+            max-width: 800px; 
+            margin: auto; 
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3); 
+            backdrop-filter: blur(10px);
+        }
+        h2, h3, h4 { color: #1e1b4b; margin-top: 0; }
+        input, button, select { width: 100%; padding: 12px; margin: 8px 0; border-radius: 8px; border: 1px solid #ddd; box-sizing: border-box; }
+        button { background: var(--primary); color: white; border: none; font-weight: bold; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        button:hover { transform: translateY(-1px); box-shadow: 0 6px 12px rgba(0,0,0,0.15); opacity: 0.95; }
         
-        /* Login Styles */
-        .login-box { text-align: center; max-width: 400px; margin: 100px auto; }
-        input, button { width: 100%; padding: 12px; margin: 8px 0; border-radius: 10px; border: 1px solid #e2e8f0; font-size: 16px; box-sizing: border-box; }
-        button { background: var(--primary); color: white; border: none; font-weight: 600; cursor: pointer; transition: 0.2s; }
-        button:hover { opacity: 0.9; transform: translateY(-1px); }
+        .class-box { border: 1px solid #e5e7eb; padding: 20px; border-radius: 15px; margin-top: 25px; background: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .code-display { background: #fef3c7; color: #92400e; padding: 5px 12px; border-radius: 6px; font-family: monospace; font-weight: bold; border: 1px solid #fde68a; }
         
-        /* Dashboard Styles */
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
-        .class-card { border: 2px solid #f1f5f9; padding: 20px; border-radius: 12px; margin-bottom: 20px; position: relative; transition: 0.3s; }
-        .class-card:hover { border-color: var(--primary); }
-        .class-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f1f5f9; padding-bottom: 10px; margin-bottom: 15px; }
-        .code-badge { background: #fef3c7; color: #92400e; padding: 4px 12px; border-radius: 6px; font-family: monospace; font-weight: bold; }
+        .task-item { background: #f9fafb; border: 1px solid #eee; padding: 15px; margin: 12px 0; border-radius: 10px; position: relative; transition: 0.3s; }
+        .task-item:hover { border-color: var(--primary); }
+        .task-img-preview { max-width: 180px; display: block; margin-top: 10px; border-radius: 8px; cursor: pointer; border: 2px solid #fff; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
         
-        .task-row { background: #fdfdfd; padding: 10px; border-radius: 8px; margin: 5px 0; border: 1px solid #f1f5f9; display: flex; flex-direction: column; }
-        .task-main { display: flex; justify-content: space-between; align-items: center; }
-        .student-list { margin-top: 8px; display: flex; flex-wrap: wrap; gap: 5px; }
-        .student-tag { background: var(--accent); color: white; padding: 2px 8px; border-radius: 4px; font-size: 12px; }
-        .btn-del { background: none; color: #94a3b8; width: auto; font-size: 14px; margin: 0; }
-        .btn-del:hover { color: var(--danger); }
+        .time-settings { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; background: #f3f4f6; padding: 12px; border-radius: 10px; margin-bottom: 15px; }
+        .time-settings label { font-size: 12px; color: #4b5563; display: block; font-weight: 600; }
+        
+        .upload-area { display: flex; gap: 10px; align-items: center; margin-bottom: 5px; }
+        .file-label { cursor: pointer; background: #f3f4f6; padding: 10px; border-radius: 8px; font-size: 14px; white-space: nowrap; border: 1px dashed #cbd5e1; }
+        .file-label:hover { background: #e2e8f0; }
+        
+        .hidden { display: none; }
+        .edit-mode { background: #fffbeb; border: 1px dashed var(--edit); padding: 15px; border-radius: 10px; margin-top: 10px; }
+        .btn-edit { background: var(--edit); width: auto; padding: 6px 12px; font-size: 13px; margin-left: 5px; }
+        .edit-img-label { font-size: 12px; color: var(--primary); font-weight: 600; text-decoration: none; cursor: pointer; display: inline-block; margin-top: 8px; border-bottom: 1px dashed var(--primary); }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <div id="loginArea" class="card login-box">
-        <h2>כניסת מורים</h2>
+<div class="card">
+    <div id="loginArea">
+        <h2>👋התחברות למערכת</h2>
         <input type="text" id="teacherUser" placeholder="שם משתמש">
         <input type="password" id="teacherPass" placeholder="סיסמה">
-        <button onclick="handleLogin()">היכנס למערכת</button>
+        <button onclick="login()">התחברות</button>
     </div>
 
     <div id="dashboard" style="display:none;">
-        <div class="header">
-            <div>שלום, <strong id="userName"></strong> 👋</div>
-            <button onclick="location.reload()" style="width:auto; padding: 5px 15px; background:#64748b;">התנתק</button>
+        <div style="display:flex; justify-content: space-between; align-items: center;">
+            <h3>שלום, <span id="displayName"></span> 👋</h3>
+            <button onclick="location.reload()" style="width:auto; padding:8px 15px; background:#ef4444;">התנתק</button>
         </div>
-
-        <div class="card">
-            <h3 style="margin-top:0">כיתה חדשה</h3>
-            <div style="display:flex; gap:10px;">
-                <input type="text" id="newClassName" placeholder="שם הכיתה (למשל: אנגלית ו'2)">
-                <button onclick="createClass()" style="width:150px; background:var(--accent)">צור כיתה</button>
-            </div>
+        <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
+        <h4>✨ צור כיתה חדשה:</h4>
+        <div style="display:flex; gap:10px;">
+            <input type="text" id="newClassName" placeholder="למשל: כיתה ט'3 - ביולוגיה">
+            <button onclick="createClass()" style="background:var(--accent); width:150px;">צור כיתה</button>
         </div>
-
-        <div id="classesContainer">טוען נתונים...</div>
+        
+        <div id="classesList">טוען כיתות...</div>
     </div>
 </div>
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getFirestore, collection, addDoc, query, where, onSnapshot, doc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, query, where, onSnapshot, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyDvnS8L9r2LMKcUD78Ix7bldVp9qzbYwtk",
@@ -74,110 +98,208 @@
 
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
-    let teacherKey = "";
 
-    // פונקציית כניסה
-    window.handleLogin = () => {
-        const u = document.getElementById('teacherUser').value.trim().toLowerCase();
-        const p = document.getElementById('teacherPass').value.trim();
-        if(!u || !p) return alert("מלא שם וסיסמה");
-        
-        teacherKey = u + "_" + p;
-        document.getElementById('userName').innerText = u;
+    let teacherKey = "";
+    let selectedImages = {}; 
+    let editingImages = {}; 
+
+    window.login = () => {
+        const user = document.getElementById('teacherUser').value.trim();
+        const pass = document.getElementById('teacherPass').value.trim();
+        if(!user || !pass) return;
+        teacherKey = user + "_" + pass;
+        document.getElementById('displayName').innerText = user;
         document.getElementById('loginArea').style.display = 'none';
         document.getElementById('dashboard').style.display = 'block';
-        
         loadClasses();
     };
 
-    // יצירת כיתה
     window.createClass = async () => {
         const name = document.getElementById('newClassName').value.trim();
         if(!name) return;
         const code = Math.random().toString(36).substring(2, 7).toUpperCase();
-        
         try {
-            await addDoc(collection(db, "classes"), { teacherId: teacherKey, name, code });
+            await addDoc(collection(db, "classes"), { 
+                teacherId: teacherKey, 
+                name, 
+                code
+            });
             document.getElementById('newClassName').value = '';
-        } catch(e) { alert("שגיאה: " + e.message); }
+        } catch (e) {
+            handleError(e, "יצירת כיתה");
+        }
     };
 
-    // טעינת כיתות
+    function handleError(e, action) {
+        console.error(`Error in ${action}:`, e);
+        alert(`שגיאה ב${action}: ${e.message}`);
+    }
+
+    window.handleImg = (e, code) => {
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+            selectedImages[code] = ev.target.result;
+            document.getElementById(`label_${code}`).innerText = "✅ תמונה נבחרה";
+        };
+        reader.readAsDataURL(e.target.files[0]);
+    };
+
+    window.handleEditImg = (e, taskId) => {
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+            editingImages[taskId] = ev.target.result;
+            const prev = document.getElementById(`edit_preview_${taskId}`);
+            if(prev) {
+                if(prev.tagName === 'IMG') prev.src = ev.target.result;
+                else {
+                    const newImg = document.createElement('img');
+                    newImg.src = ev.target.result;
+                    newImg.className = 'task-img-preview';
+                    newImg.id = `edit_preview_${taskId}`;
+                    prev.replaceWith(newImg);
+                }
+            }
+            document.getElementById(`edit_img_btn_label_${taskId}`).innerText = "✅ תמונה הוחלפה";
+        };
+        reader.readAsDataURL(e.target.files[0]);
+    };
+
     function loadClasses() {
         const q = query(collection(db, "classes"), where("teacherId", "==", teacherKey));
         onSnapshot(q, (snap) => {
-            const container = document.getElementById('classesContainer');
-            container.innerHTML = '';
-            
+            const list = document.getElementById('classesList');
+            list.innerHTML = '';
+
             snap.forEach(cDoc => {
                 const c = cDoc.data();
+                const classId = cDoc.id;
                 const div = document.createElement('div');
-                div.className = 'card class-card';
+                div.className = 'class-box';
+                const now = new Date().toISOString().slice(0, 16);
+                const tomorrow = new Date(Date.now() + 86400000).toISOString().slice(0, 16);
+                
                 div.innerHTML = `
-                    <div class="class-header">
-                        <h3>${c.name}</h3>
-                        <span class="code-badge">${c.code}</span>
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+                        <div>
+                            <strong>🏫 ${c.name}</strong>
+                            <span class="code-display" style="margin-right:10px;">${c.code}</span>
+                        </div>
                     </div>
-                    <div style="display:flex; gap:10px;">
-                        <input type="text" id="inp_${c.code}" placeholder="משימה חדשה לכיתה זו...">
-                        <button onclick="addTask('${c.code}')" style="width:100px;">שלח</button>
+                    <div class="time-settings">
+                        <div><label>זמן התחלה</label><input type="datetime-local" id="start_${c.code}" value="${now}"></div>
+                        <div><label>זמן סיום</label><input type="datetime-local" id="end_${c.code}" value="${tomorrow}"></div>
                     </div>
+                    <div class="upload-area">
+                        <input type="text" id="task_${c.code}" placeholder="מה המשימה?">
+                        <label class="file-label" id="label_${c.code}">📷 <input type="file" class="hidden" onchange="handleImg(event, '${c.code}')"></label>
+                    </div>
+                    <button onclick="addTask('${c.code}')">פרסם משימה</button>
                     <div id="tasks_${c.code}" style="margin-top:15px;"></div>
-                    <button class="btn-del" onclick="deleteObj('classes', '${cDoc.id}')" style="margin-top:20px;">🗑️ מחק כיתה</button>
                 `;
-                container.appendChild(div);
-                loadTasks(c.code);
+                list.appendChild(div);
+                syncTasks(c.code);
             });
         });
     }
 
-    // הוספת משימה
     window.addTask = async (code) => {
-        const title = document.getElementById(`inp_${code}`).value.trim();
-        if(!title) return;
-        await addDoc(collection(db, "tasks"), { classCode: code, title });
-        document.getElementById(`inp_${code}`).value = '';
+        const title = document.getElementById(`task_${code}`).value;
+        const startTime = new Date(document.getElementById(`start_${code}`).value).getTime();
+        const endTime = new Date(document.getElementById(`end_${code}`).value).getTime();
+        const img = selectedImages[code] || null;
+
+        if(!title && !img) return;
+
+        try {
+            await addDoc(collection(db, "tasks"), {
+                classCode: code,
+                title: title || "משימה",
+                imageUrl: img,
+                startTime,
+                endTime
+            });
+            document.getElementById(`task_${code}`).value = '';
+            selectedImages[code] = null;
+            if(document.getElementById(`label_${code}`)) document.getElementById(`label_${code}`).innerText = "📷";
+        } catch (e) {
+            handleError(e, "הוספת משימה");
+        }
     };
 
-    // טעינת משימות ומעקב תלמידים
-    function loadTasks(code) {
-        const q = query(collection(db, "tasks"), where("classCode", "==", code));
-        onSnapshot(q, (snap) => {
-            const taskList = document.getElementById(`tasks_${code}`);
-            if(!taskList) return;
-            taskList.innerHTML = '<strong>משימות:</strong>';
-            
+    function syncTasks(code) {
+        onSnapshot(query(collection(db, "tasks"), where("classCode", "==", code)), (snap) => {
+            const container = document.getElementById(`tasks_${code}`);
+            if(!container) return;
+            container.innerHTML = '';
             snap.forEach(tDoc => {
                 const t = tDoc.data();
-                const tId = tDoc.id;
-                const row = document.createElement('div');
-                row.className = 'task-row';
-                row.innerHTML = `
-                    <div class="task-main">
-                        <span>📝 ${t.title}</span>
-                        <button class="btn-del" onclick="deleteObj('tasks', '${tId}')">✖</button>
+                const taskId = tDoc.id;
+                const item = document.createElement('div');
+                item.className = 'task-item';
+                
+                item.innerHTML = `
+                    <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                        <div><strong>${t.title}</strong></div>
+                        <div style="display:flex; gap:5px;">
+                            <button class="btn-edit" onclick="toggleEdit('${taskId}')">✏️ ערוך</button>
+                            <button style="background:var(--danger); color:white; border:none; border-radius:4px; width:auto; padding:6px 10px; font-size:11px; cursor:pointer;" onclick="handleDeleteTask('${taskId}')">🗑️</button>
+                        </div>
                     </div>
-                    <div class="student-list" id="subs_${tId}"></div>
-                `;
-                taskList.appendChild(row);
+                    <div id="edit_ui_${taskId}" class="hidden edit-mode">
+                        <label style="font-size:12px; font-weight:bold;">כותרת:</label>
+                        <input type="text" id="edit_title_${taskId}" value="${t.title}">
+                        
+                        <div style="margin-top:10px;">
+                            <label style="font-size:12px; display:block; font-weight:bold;">תמונה:</label>
+                            ${t.imageUrl ? `<img src="${t.imageUrl}" id="edit_preview_${taskId}" class="task-img-preview" style="margin-bottom:8px;">` : `<div id="edit_preview_${taskId}" style="font-size:12px; color:#666; margin:5px 0;">אין תמונה כרגע</div>`}
+                            <label class="edit-img-label" id="edit_img_btn_label_${taskId}">
+                                📷 החלף / הוסף תמונה
+                                <input type="file" class="hidden" onchange="handleEditImg(event, '${taskId}')">
+                            </label>
+                        </div>
 
-                // האזנה להגשות
-                onSnapshot(query(collection(db, "submissions"), where("taskId", "==", tId), where("completed", "==", true)), (sSnap) => {
-                    const sDiv = document.getElementById(`subs_${tId}`);
-                    if(!sDiv) return;
-                    sDiv.innerHTML = sSnap.empty ? '<small style="color:#94a3b8">טרם בוצע</small>' : '';
-                    sSnap.forEach(s => {
-                        sDiv.innerHTML += `<span class="student-tag">${s.data().studentName}</span>`;
-                    });
-                });
+                        <button onclick="saveEdit('${taskId}')" style="background:var(--accent); padding:8px; margin-top:12px;">שמור שינויים</button>
+                    </div>
+                    ${!t.imageUrl ? '' : `<img src="${t.imageUrl}" class="task-img-preview" onclick="toggleEdit('${taskId}')">`}
+                `;
+                container.appendChild(item);
             });
         });
     }
 
-    // פונקציית מחיקה כללית
-    window.deleteObj = async (col, id) => {
-        if(confirm("בטוח שברצונך למחוק?")) {
-            await deleteDoc(doc(db, col, id));
+    window.handleDeleteTask = async (taskId) => {
+        if(confirm("למחוק את המשימה הזו?")) {
+            try {
+                await deleteDoc(doc(db, 'tasks', taskId));
+            } catch (e) {
+                handleError(e, "מחיקת משימה");
+            }
+        }
+    };
+
+    window.toggleEdit = (taskId) => {
+        const el = document.getElementById(`edit_ui_${taskId}`);
+        if(el) {
+            el.classList.toggle('hidden');
+            editingImages[taskId] = null;
+        }
+    };
+
+    window.saveEdit = async (taskId) => {
+        const title = document.getElementById(`edit_title_${taskId}`).value;
+        const newImg = editingImages[taskId];
+        
+        const updates = { title };
+        if (newImg) {
+            updates.imageUrl = newImg;
+        }
+
+        try {
+            await updateDoc(doc(db, "tasks", taskId), updates);
+            toggleEdit(taskId);
+            editingImages[taskId] = null;
+        } catch (e) {
+            handleError(e, "עריכת משימה");
         }
     };
 </script>
