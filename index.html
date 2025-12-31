@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>  ניהול משימות ראלי מטו"ס- מורים</title>
+<title> ניהול משימות - עיצוב נוזלי מלא </title>
 <style>
 :root {
     --primary: #10b981; 
@@ -15,7 +15,7 @@
     --glass-border: rgba(255, 255, 255, 0.2);
 }
 
-/* רקע נוזלי זז */
+/* רקע נוזלי דינמי */
 body {
     font-family: 'Segoe UI', system-ui, sans-serif;
     margin: 0;
@@ -35,7 +35,15 @@ body {
     100% { background-position: 0% 50%; }
 }
 
-/* אלמנטים נוזליים דקורטיביים ברקע */
+.stars {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none;
+    background: transparent url('https://www.transparenttextures.com/patterns/stardust.png') repeat;
+    opacity: 0.3;
+    z-index: 0;
+}
+
 .blob {
     position: fixed;
     width: 500px;
@@ -46,25 +54,10 @@ body {
     filter: blur(80px);
     animation: move 20s infinite alternate;
 }
-.blob-2 {
-    top: 50%; left: 50%;
-    background: radial-gradient(circle, rgba(139,92,246,0.3) 0%, rgba(0,0,0,0) 70%);
-    animation-delay: -5s;
-}
 
 @keyframes move {
     from { transform: translate(-20%, -20%); }
     to { transform: translate(20%, 20%); }
-}
-
-/* אפקט נצנצים */
-.stars {
-    position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    pointer-events: none;
-    background: transparent url('https://www.transparenttextures.com/patterns/stardust.png') repeat;
-    opacity: 0.3;
-    z-index: 0;
 }
 
 .card {
@@ -81,47 +74,41 @@ body {
     box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
 }
 
-h2, h3, h4 { color: #fff; text-shadow: 0 2px 10px rgba(0,0,0,0.3); }
-
 input { 
     width: 100%; padding: 14px; margin: 10px 0; border-radius: 15px; 
     border: 1px solid var(--glass-border); 
     background: rgba(0,0,0,0.2); 
     color: white; box-sizing: border-box; outline: none;
-    transition: 0.3s;
 }
-input:focus { border-color: var(--primary); background: rgba(0,0,0,0.4); }
 
 button { 
     background: linear-gradient(135deg, var(--primary), var(--accent)); 
     color: white; border: none; font-weight: bold; cursor: pointer; 
-    transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); border-radius: 15px; padding: 14px;
+    transition: 0.3s; border-radius: 15px; padding: 14px;
 }
-button:hover { transform: scale(1.02); filter: brightness(1.1); box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
 
 .class-box { 
     background: rgba(255, 255, 255, 0.05); 
     border: 1px solid var(--glass-border); 
     padding: 20px; border-radius: 22px; margin-top: 30px; 
 }
-.code-display { background: var(--purple); color: white; padding: 6px 14px; border-radius: 10px; font-weight: bold; }
+
+.time-settings { 
+    display: grid; grid-template-columns: 1fr 1fr; gap: 10px; 
+    background: rgba(0,0,0,0.3); padding: 15px; border-radius: 18px; margin-bottom: 15px; 
+}
+
+.time-settings label { font-size: 12px; color: var(--primary); font-weight: bold; display: block; margin-bottom: 5px; }
 
 .task-item { 
     background: rgba(255, 255, 255, 0.07); 
     border: 1px solid var(--glass-border); 
-    padding: 18px; margin: 15px 0; border-radius: 18px; transition: 0.3s; 
-}
-.task-item:hover { transform: translateX(-5px); background: rgba(255, 255, 255, 0.12); }
-
-.task-img-preview { 
-    max-width: 100%; height: auto; border-radius: 15px; 
-    margin-top: 15px; border: 1px solid var(--glass-border); 
+    padding: 18px; margin: 15px 0; border-radius: 18px; 
 }
 
-.file-label { 
-    cursor: pointer; background: var(--glass-bg); padding: 12px; 
-    border-radius: 12px; font-size: 14px; border: 1px dashed var(--glass-border); 
-}
+.task-img-preview { max-width: 100%; border-radius: 15px; margin-top: 10px; border: 1px solid var(--glass-border); }
+
+.file-label { cursor: pointer; background: var(--glass-bg); padding: 12px; border-radius: 12px; border: 1px dashed var(--glass-border); }
 .hidden { display: none; }
 </style>
 </head>
@@ -129,11 +116,10 @@ button:hover { transform: scale(1.02); filter: brightness(1.1); box-shadow: 0 10
 
 <div class="stars"></div>
 <div class="blob"></div>
-<div class="blob blob-2"></div>
 
 <div class="card">
     <div id="loginArea">
-        <h2> כניסה למערכת</h2>
+        <h2> ✨ כניסה למערכת </h2>
         <input type="text" id="teacherUser" placeholder="שם משתמש">
         <input type="password" id="teacherPass" placeholder="סיסמה">
         <button onclick="login()" style="width: 100%;">התחברות</button>
@@ -144,13 +130,15 @@ button:hover { transform: scale(1.02); filter: brightness(1.1); box-shadow: 0 10
             <h3>היי, <span id="displayName" style="color: var(--primary);"></span> ✨</h3>
             <button onclick="logout()" style="background:var(--danger); padding:8px 15px;">יציאה</button>
         </div>
-        <div style="margin: 25px 0;">
-            <h4>יצירת כיתה חדשה</h4>
+        
+        <div class="class-box" style="margin-top:20px;">
+            <h4>צור כיתה חדשה</h4>
             <div style="display:flex; gap:10px;">
                 <input type="text" id="newClassName" placeholder="שם הכיתה">
-                <button onclick="createClass()" style="min-width: 120px;">צור</button>
+                <button onclick="createClass()" style="min-width: 100px;">צור</button>
             </div>
         </div>
+
         <div id="classesList">טוען נתונים...</div>
     </div>
 </div>
@@ -174,7 +162,7 @@ const db = getFirestore(app);
 let teacherKey = "";
 let selectedImages = {};
 
-// פונקציית הקטנת תמונה
+// פונקציית הקטנת תמונה (נשמרת כדי למנוע את שגיאת הגודל שקיבלת)
 async function compressImage(base64Str) {
     return new Promise((resolve) => {
         const img = new Image();
@@ -193,16 +181,13 @@ async function compressImage(base64Str) {
     });
 }
 
-// התחברות
+// לוגיקת התחברות עם זיכרון
 window.login = (userVal, passVal) => {
     const user = userVal || document.getElementById('teacherUser').value.trim();
     const pass = passVal || document.getElementById('teacherPass').value.trim();
-    
     if(!user || !pass) return;
 
     teacherKey = user + "_" + pass;
-    
-    // שמירה במכשיר
     localStorage.setItem('teacherUser', user);
     localStorage.setItem('teacherPass', pass);
 
@@ -212,20 +197,16 @@ window.login = (userVal, passVal) => {
     loadClasses();
 };
 
-// יציאה ומחיקת זיכרון
 window.logout = () => {
-    localStorage.removeItem('teacherUser');
-    localStorage.removeItem('teacherPass');
+    localStorage.clear();
     location.reload();
 };
 
-// בדיקה אם המשתמש כבר מחובר (כשפותחים את הדף)
+// טעינה אוטומטית אם מחובר
 window.addEventListener('DOMContentLoaded', () => {
-    const savedUser = localStorage.getItem('teacherUser');
-    const savedPass = localStorage.getItem('teacherPass');
-    if(savedUser && savedPass) {
-        window.login(savedUser, savedPass);
-    }
+    const u = localStorage.getItem('teacherUser');
+    const p = localStorage.getItem('teacherPass');
+    if(u && p) window.login(u, p);
 });
 
 window.createClass = async () => {
@@ -240,7 +221,7 @@ window.handleImg = (e, code) => {
     const reader = new FileReader();
     reader.onload = async (ev) => {
         selectedImages[code] = await compressImage(ev.target.result);
-        document.getElementById(`label_${code}`).innerText = "✅ נבחר";
+        document.getElementById(`label_${code}`).innerText = "✅ תמונה מוכנה";
     };
     reader.readAsDataURL(e.target.files[0]);
 };
@@ -251,18 +232,32 @@ function loadClasses() {
         list.innerHTML = '';
         snap.forEach(cDoc => {
             const c = cDoc.data();
+            const now = new Date().toISOString().slice(0, 16);
+            const tomorrow = new Date(Date.now() + 86400000).toISOString().slice(0, 16);
             const div = document.createElement('div');
             div.className = 'class-box';
             div.innerHTML = `
-                <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <strong>${c.name}</strong>
-                    <span class="code-display">${c.code}</span>
+                <div style="display:flex; justify-content:space-between; margin-bottom:15px;">
+                    <strong>🏫 ${c.name}</strong>
+                    <span style="background:var(--purple); padding:2px 8px; border-radius:5px;">${c.code}</span>
                 </div>
-                <div style="display:flex; gap:10px; margin-top:15px;">
-                    <input type="text" id="task_${c.code}" placeholder="מה המשימה?">
+                
+                <div class="time-settings">
+                    <div>
+                        <label>זמן התחלה</label>
+                        <input type="datetime-local" id="start_${c.code}" value="${now}">
+                    </div>
+                    <div>
+                        <label>זמן סיום</label>
+                        <input type="datetime-local" id="end_${c.code}" value="${tomorrow}">
+                    </div>
+                </div>
+
+                <div style="display:flex; gap:10px;">
+                    <input type="text" id="task_${c.code}" placeholder="תיאור המשימה...">
                     <label class="file-label" id="label_${c.code}">📷<input type="file" class="hidden" onchange="handleImg(event, '${c.code}')"></label>
                 </div>
-                <button onclick="addTask('${c.code}')" style="width:100%; margin-top:10px;">פרסם</button>
+                <button onclick="addTask('${c.code}')" style="width:100%; margin-top:10px;">פרסם משימה</button>
                 <div id="tasks_${c.code}"></div>
             `;
             list.appendChild(div);
@@ -271,20 +266,34 @@ function loadClasses() {
     });
 }
 
-async function addTask(code) {
+window.addTask = async (code) => {
     const title = document.getElementById(`task_${code}`).value;
+    const start = document.getElementById(`start_${code}`).value;
+    const end = document.getElementById(`end_${code}`).value;
     const img = selectedImages[code] || null;
-    await addDoc(collection(db, "tasks"), { 
-        classCode: code, 
-        title: title || "משימה", 
-        imageUrl: img,
-        startTime: Date.now(),
-        endTime: Date.now() + 86400000 
-    });
-    document.getElementById(`task_${code}`).value = '';
-    selectedImages[code] = null;
-    document.getElementById(`label_${code}`).innerText = "📷";
-}
+
+    if(!title && !img) {
+        alert("נא להזין תיאור או לבחור תמונה");
+        return;
+    }
+
+    try {
+        await addDoc(collection(db, "tasks"), { 
+            classCode: code, 
+            title: title || "משימה חדשה", 
+            imageUrl: img,
+            startTime: new Date(start).getTime(),
+            endTime: new Date(end).getTime()
+        });
+        
+        // ניקוי שדות
+        document.getElementById(`task_${code}`).value = '';
+        selectedImages[code] = null;
+        document.getElementById(`label_${code}`).innerText = "📷";
+    } catch (e) {
+        alert("שגיאה בפרסום: " + e.message);
+    }
+};
 
 function syncTasks(code) {
     onSnapshot(query(collection(db, "tasks"), where("classCode", "==", code)), (snap) => {
@@ -296,9 +305,9 @@ function syncTasks(code) {
             const item = document.createElement('div');
             item.className = 'task-item';
             item.innerHTML = `
-                <div style="display:flex; justify-content:space-between;">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
                     <b>${t.title}</b>
-                    <button style="background:var(--danger); padding:4px 8px; font-size:10px;" onclick="deleteTask('${tDoc.id}')">🗑️</button>
+                    <button style="background:var(--danger); padding:5px 10px; font-size:12px;" onclick="deleteTask('${tDoc.id}')">🗑️</button>
                 </div>
                 ${t.imageUrl ? `<img src="${t.imageUrl}" class="task-img-preview">` : ''}
             `;
@@ -307,8 +316,7 @@ function syncTasks(code) {
     });
 }
 
-window.deleteTask = async (id) => { if(confirm("למחוק?")) await deleteDoc(doc(db, 'tasks', id)); };
+window.deleteTask = async (id) => { if(confirm("למחוק את המשימה?")) await deleteDoc(doc(db, 'tasks', id)); };
 </script>
 </body>
 </html>
-
