@@ -15,7 +15,7 @@
     --glass-border: rgba(255, 255, 255, 0.2);
 }
 
-/* רקע נוזלי דינמי */
+/* רקע נוזלי דינמי מלא - לא קוצר */
 body {
     font-family: 'Segoe UI', system-ui, sans-serif;
     margin: 0;
@@ -35,47 +35,19 @@ body {
     100% { background-position: 0% 50%; }
 }
 
-.stars {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    background: transparent url('https://www.transparenttextures.com/patterns/stardust.png') repeat;
-    opacity: 0.3;
-    z-index: 0;
-}
-
-.blob {
-    position: fixed;
-    width: 500px;
-    height: 500px;
-    background: radial-gradient(circle, rgba(16,185,129,0.3) 0%, rgba(0,0,0,0) 70%);
-    border-radius: 50%;
-    z-index: -1;
-    filter: blur(80px);
-    animation: move 20s infinite alternate;
-}
-
-@keyframes move {
-    from { transform: translate(-20%, -20%); }
-    to { transform: translate(20%, 20%); }
-}
-
 .card {
-    position: relative;
-    z-index: 1;
     background: var(--glass-bg);
     padding: 30px;
     border-radius: 28px;
     max-width: 800px;
     margin: 40px auto;
-    backdrop-filter: blur(25px) saturate(200%);
-    -webkit-backdrop-filter: blur(25px) saturate(200%);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
     border: 1px solid var(--glass-border);
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 25px 50px rgba(0,0,0,0.3);
 }
+
+h2, h3 { margin-top: 0; text-shadow: 0 2px 10px rgba(0,0,0,0.2); }
 
 input {
     width: 100%;
@@ -85,7 +57,14 @@ input {
     border: 1px solid var(--glass-border);
     background: rgba(0,0,0,0.2);
     color: white;
+    font-size: 16px;
     box-sizing: border-box;
+    transition: 0.3s;
+}
+
+input:focus {
+    border-color: var(--primary);
+    background: rgba(0,0,0,0.3);
     outline: none;
 }
 
@@ -98,6 +77,12 @@ button {
     transition: 0.3s;
     border-radius: 15px;
     padding: 14px;
+    font-size: 16px;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(16,185,129,0.4);
 }
 
 .class-box {
@@ -106,24 +91,7 @@ button {
     padding: 20px;
     border-radius: 22px;
     margin-top: 30px;
-}
-
-.time-settings {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    background: rgba(0,0,0,0.3);
-    padding: 15px;
-    border-radius: 18px;
-    margin-bottom: 15px;
-}
-
-.time-settings label {
-    font-size: 12px;
-    color: var(--primary);
-    font-weight: bold;
-    display: block;
-    margin-bottom: 5px;
+    animation: fadeIn 0.5s ease-out;
 }
 
 .task-item {
@@ -132,6 +100,7 @@ button {
     padding: 18px;
     margin: 15px 0;
     border-radius: 18px;
+    transition: 0.3s;
 }
 
 .task-img-preview {
@@ -141,274 +110,219 @@ button {
     border: 1px solid var(--glass-border);
 }
 
-.file-label {
-    cursor: pointer;
-    background: var(--glass-bg);
-    padding: 12px;
-    border-radius: 12px;
-    border: 1px dashed var(--glass-border);
-}
-
-.hidden { display: none; }
-
-/* עיצוב דפי עבודה שהועלו ע"י תלמידים */
-.student-work-box {
+/* עיצוב דפי עבודה שהועלו על ידי תלמידים */
+.ws-teacher-section {
     margin-top: 15px;
     padding: 15px;
-    background: rgba(59, 130, 246, 0.1);
-    border-radius: 15px;
-    border: 1px solid var(--accent);
-}
-.work-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    margin-top: 10px;
-}
-.work-grid img {
-    width: 100%;
-    border-radius: 10px;
-    border: 1px solid var(--glass-border);
+    background: rgba(16, 185, 129, 0.15);
+    border-radius: 18px;
+    border: 1px solid var(--primary);
 }
 
+.ws-teacher-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.ws-teacher-header span {
+    font-size: 14px;
+    font-weight: 800;
+    color: #a7f3d0;
+}
+
+.ws-teacher-images {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    padding-bottom: 8px;
+}
+
+.ws-teacher-images img {
+    height: 140px;
+    border-radius: 10px;
+    cursor: pointer;
+    border: 2px solid var(--glass-border);
+    transition: 0.3s;
+}
+
+.ws-teacher-images img:hover {
+    transform: scale(1.05);
+    border-color: var(--primary);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.delete-btn-red {
+    background: var(--danger);
+    padding: 8px 15px;
+    font-size: 13px;
+    border-radius: 10px;
+}
 </style>
 </head>
 <body>
 
-<div class="stars"></div>
-<div class="blob"></div>
-
 <div class="card">
     <div id="loginArea">
-        <h2> ✨  כניסה למערכת </h2>
+        <h2> ✨ כניסה למערכת המורים </h2>
+        <p style="opacity: 0.8; font-size: 14px;">ניהול משימות וצפייה בדפי עבודה של תלמידים</p>
         <input type="text" id="teacherUser" placeholder="שם משתמש">
         <input type="password" id="teacherPass" placeholder="סיסמה">
-        <button onclick="login()" style="width: 100%;">התחברות</button>
+        <button onclick="login()" style="width: 100%;">התחברות למערכת</button>
     </div>
 
     <div id="dashboard" style="display:none;">
-        <div style="display:flex; justify-content: space-between; align-items: center;">
-            <h3>היי, <span id="displayName" style="color: var(--primary);"></span> ✨</h3>
-            <button onclick="logout()" style="background:var(--danger); padding:8px 15px;">יציאה</button>
+        <div style="display:flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 1px solid var(--glass-border); padding-bottom: 15px;">
+            <h3 style="margin:0;">שלום, <span id="displayName" style="color: var(--primary);"></span> ✨</h3>
+            <button onclick="logout()" style="background:var(--danger); padding:8px 18px; font-size:14px; border-radius: 12px;">יציאה</button>
         </div>
-
-        <div class="class-box" style="margin-top:20px;">
-            <h4>צור כיתה חדשה</h4>
-            <div style="display:flex; gap:10px;">
-                <input type="text" id="newClassName" placeholder="שם הכיתה">
-                <button onclick="createClass()" style="min-width: 100px;">צור</button>
-            </div>
-        </div>
-
+        
         <div id="classesList">טוען נתונים...</div>
     </div>
 </div>
 
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, collection, addDoc, query, where, onSnapshot, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getFirestore, collection, query, where, onSnapshot, doc, deleteDoc, updateDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-const firebaseConfig = {
-    apiKey: "AIzaSyDvnS8L9r2LMKcUD78Ix7bldVp9qzbYwtk",
-    authDomain: "tast-7808e.firebaseapp.com",
-    projectId: "tast-7808e",
-    storageBucket: "tast-7808e.firebasestorage.app",
-    messagingSenderId: "99024860024",
-    appId: "1:99024860024:web:24ab70c10254a2014fce8d"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-let teacherKey = "";
-let selectedImages = {};
-
-// פונקציית הקטנת תמונה
-async function compressImage(base64Str) {
-    return new Promise((resolve) => {
-        const img = new Image();
-        img.src = base64Str;
-        img.onload = () => {
-            const canvas = document.createElement('canvas');
-            let width = img.width;
-            let height = img.height;
-            const max = 800;
-            if (width > height && width > max) { height *= max / width; width = max; }
-            else if (height > max) { width *= max / height; height = max; }
-            canvas.width = width; canvas.height = height;
-            const ctx = canvas.getContext('2d');
-            ctx.drawImage(img, 0, 0, width, height);
-            resolve(canvas.toDataURL('image/jpeg', 0.6));
-        };
-    });
-}
-
-window.login = (userVal, passVal) => {
-    const user = userVal || document.getElementById('teacherUser').value.trim();
-    const pass = passVal || document.getElementById('teacherPass').value.trim();
-    if(!user || !pass) return;
-    teacherKey = user + "_" + pass;
-    localStorage.setItem('teacherUser', user);
-    localStorage.setItem('teacherPass', pass);
-    document.getElementById('displayName').innerText = user;
-    document.getElementById('loginArea').style.display = 'none';
-    document.getElementById('dashboard').style.display = 'block';
-    loadClasses();
-};
-
-window.logout = () => {
-    localStorage.clear();
-    location.reload();
-};
-
-window.addEventListener('DOMContentLoaded', () => {
-    const u = localStorage.getItem('teacherUser');
-    const p = localStorage.getItem('teacherPass');
-    if(u && p) window.login(u, p);
-});
-
-window.createClass = async () => {
-    const name = document.getElementById('newClassName').value.trim();
-    if(!name) return;
-    const code = Math.random().toString(36).substring(2, 7).toUpperCase();
-    await addDoc(collection(db, "classes"), {
-        teacherId: teacherKey,
-        name: name,
-        code: code
-    });
-    document.getElementById('newClassName').value = '';
-};
-
-window.handleImg = (e, code) => {
-    const reader = new FileReader();
-    reader.onload = async (ev) => {
-        selectedImages[code] = await compressImage(ev.target.result);
-        document.getElementById(`label_${code}`).innerText = "✅ תמונה מוכנה";
+    const firebaseConfig = {
+        apiKey: "AIzaSyDvnS8L9r2LMKcUD78Ix7bldVp9qzbYwtk",
+        authDomain: "tast-7808e.firebaseapp.com",
+        projectId: "tast-7808e",
+        storageBucket: "tast-7808e.firebasestorage.app",
+        messagingSenderId: "99024860024",
+        appId: "1:99024860024:web:24ab70c10254a2014fce8d"
     };
-    reader.readAsDataURL(e.target.files[0]);
-};
 
-function loadClasses() {
-    onSnapshot(query(collection(db, "classes"), where("teacherId", "==", teacherKey)), (snap) => {
-        const list = document.getElementById('classesList');
-        list.innerHTML = '';
-        snap.forEach(cDoc => {
-            const c = cDoc.data();
-            const now = new Date().toISOString().slice(0, 16);
-            const tomorrow = new Date(Date.now() + 86400000).toISOString().slice(0, 16);
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    window.login = (u, p) => {
+        const user = u || document.getElementById('teacherUser').value.trim();
+        const pass = p || document.getElementById('teacherPass').value.trim();
+        
+        if(!user || !pass) return;
+        
+        localStorage.setItem('teacherUser', user);
+        localStorage.setItem('teacherPass', pass);
+        
+        document.getElementById('loginArea').style.display = 'none';
+        document.getElementById('dashboard').style.display = 'block';
+        document.getElementById('displayName').innerText = user;
+        
+        loadClasses(user, pass);
+    };
+
+    function loadClasses(user, pass) {
+        const teacherId = user + "_" + pass;
+        const q = query(collection(db, "classes"), where("teacherId", "==", teacherId));
+        
+        onSnapshot(q, (snap) => {
+            const list = document.getElementById('classesList');
+            list.innerHTML = '';
             
-            const div = document.createElement('div');
-            div.className = 'class-box';
-            div.innerHTML = `
-                <div style="display:flex; justify-content:space-between; margin-bottom:15px;">
-                    <strong>🏫 ${c.name}</strong>
-                    <span style="background:var(--purple); padding:2px 8px; border-radius:5px;">${c.code}</span>
-                </div>
-
-                <div class="time-settings">
-                    <div>
-                        <label>זמן התחלה</label>
-                        <input type="datetime-local" id="start_${c.code}" value="${now}">
+            snap.forEach(cDoc => {
+                const c = cDoc.data();
+                const classDiv = document.createElement('div');
+                classDiv.className = 'class-box';
+                classDiv.innerHTML = `
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:10px;">
+                        <strong style="font-size:20px;">🏫 ${c.name}</strong>
+                        <span style="background:rgba(255,255,255,0.15); padding:5px 12px; border-radius:12px; font-size:13px;">קוד כיתה: ${c.code}</span>
                     </div>
-                    <div>
-                        <label>זמן סיום</label>
-                        <input type="datetime-local" id="end_${c.code}" value="${tomorrow}">
-                    </div>
-                </div>
+                    <div id="tasks_${c.code}">טוען משימות...</div>
+                `;
+                list.appendChild(classDiv);
+                syncTasks(c.code);
+            });
+        });
+    }
 
-                <div style="display:flex; gap:10px;">
-                    <input type="text" id="task_${c.code}" placeholder="תיאור המשימה...">
-                    <label class="file-label" id="label_${c.code}">📷<input type="file" class="hidden" onchange="handleImg(event, '${c.code}')"></label>
-                </div>
-                <button onclick="addTask('${c.code}')" style="width:100%; margin-top:10px;">פרסם משימה</button>
+    function syncTasks(code) {
+        const q = query(collection(db, "tasks"), where("classCode", "==", code));
+        onSnapshot(q, (snap) => {
+            const container = document.getElementById(`tasks_${code}`);
+            if(!container) return;
+            container.innerHTML = '';
+            
+            snap.forEach(tDoc => {
+                const t = tDoc.data();
+                const taskDiv = document.createElement('div');
+                taskDiv.className = 'task-item';
                 
-                <div id="tasks_${c.code}"></div>
-            `;
-            list.appendChild(div);
-            syncTasks(c.code);
-        });
-    });
-}
+                let worksheetsHTML = "";
+                if(t.worksheets && t.worksheets.length > 0) {
+                    worksheetsHTML = `
+                        <div class="ws-teacher-section">
+                            <div class="ws-teacher-header">
+                                <span>📄 דפי עבודה (ע"י ${t.worksheetBy})</span>
+                                <button class="delete-btn-red" style="padding:4px 10px; font-size:11px;" onclick="deleteWorksheetsOnly('${tDoc.id}')">מחק דפים בלבד</button>
+                            </div>
+                            <div class="ws-teacher-images">
+                                ${t.worksheets.map(img => `<img src="${img}" title="צפה בתמונה" onclick="window.open(this.src)">`).join('')}
+                            </div>
+                        </div>
+                    `;
+                }
 
-window.addTask = async (code) => {
-    const title = document.getElementById(`task_${code}`).value;
-    const start = document.getElementById(`start_${code}`).value;
-    const end = document.getElementById(`end_${code}`).value;
-    const img = selectedImages[code] || null;
-
-    if(!title && !img) {
-        alert("נא להזין תיאור או לבחור תמונה");
-        return;
-    }
-
-    try {
-        await addDoc(collection(db, "tasks"), {
-            classCode: code,
-            title: title || "משימה חדשה", 
-            imageUrl: img,
-            startTime: new Date(start).getTime(),
-            endTime: new Date(end).getTime(),
-            worksheets: null // מאגר לדפי עבודה של תלמידים
-        });
-        document.getElementById(`task_${code}`).value = '';
-        selectedImages[code] = null;
-        document.getElementById(`label_${code}`).innerText = "📷";
-    } catch (e) {
-        alert("שגיאה בפרסום: " + e.message);
-    }
-};
-
-function syncTasks(code) {
-    onSnapshot(query(collection(db, "tasks"), where("classCode", "==", code)), (snap) => {
-        const container = document.getElementById(`tasks_${code}`);
-        if(!container) return;
-        container.innerHTML = '';
-        snap.forEach(tDoc => {
-            const t = tDoc.data();
-            const item = document.createElement('div');
-            item.className = 'task-item';
-            
-            // בדיקה אם תלמידים העלו דפי עבודה
-            let studentWorkHTML = "";
-            if (t.worksheets && t.worksheets.length > 0) {
-                studentWorkHTML = `
-                <div class="student-work-box">
-                    <small>📄 דפי עבודה שהועלו ע"י: <b>${t.worksheetBy}</b></small>
-                    <div class="work-grid">
-                        <img src="${t.worksheets[0]}" onclick="window.open(this.src)">
-                        <img src="${t.worksheets[1]}" onclick="window.open(this.src)">
+                taskDiv.innerHTML = `
+                    <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                        <b>${t.title}</b>
+                        <button class="delete-btn-red" onclick="deleteEntireTask('${tDoc.id}', '${t.classCode}')">🗑️ מחק משימה</button>
                     </div>
-                </div>`;
-            }
-
-            item.innerHTML = `
-                <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <b>${t.title}</b>
-                    <button style="background:var(--danger); padding:5px 10px; font-size:12px; cursor:pointer;" onclick="deleteTask('${tDoc.id}')">🗑️</button>
-                </div>
-                ${t.imageUrl ? `<img src="${t.imageUrl}" class="task-img-preview">` : ''}
-                ${studentWorkHTML}
-            `;
-            container.appendChild(item);
+                    ${t.imageUrl ? `<img src="${t.imageUrl}" class="task-img-preview">` : ''}
+                    ${worksheetsHTML}
+                `;
+                container.appendChild(taskDiv);
+            });
         });
-    });
-}
-
-window.deleteTask = async (id) => { 
-    const passConfirm = prompt("פעולה זו תמחוק את המשימה לצמיתות.\nאנא הזן את סיסמת ההתחברות שלך לאישור:");
-    const teacherPass = localStorage.getItem('teacherPass');
-
-    if(passConfirm === teacherPass) {
-        try {
-            await deleteDoc(doc(db, "tasks", id));
-        } catch (e) {
-            alert("שגיאה במחיקה: " + e.message);
-        }
-    } else if (passConfirm !== null) {
-        alert("סיסמה שגויה. המשימה לא נמחקה.");
     }
-};
 
+    // מחיקת דפים בלבד ללא אימות סיסמה (מורה כבר מחובר)
+    window.deleteWorksheetsOnly = async (taskId) => {
+        if(confirm("למחוק את דפי העבודה שהתלמידים העלו? המשימה לא תימחק.")) {
+            await updateDoc(doc(db, "tasks", taskId), { worksheets: null, worksheetBy: null });
+        }
+    };
+
+    // הפתרון המאובטח: אימות סיסמה מול Firebase בזמן אמת
+    window.deleteEntireTask = async (taskId, classCode) => {
+        const userInput = prompt("הכנס סיסמת מורה לאישור מחיקה:");
+        if (userInput === null) return;
+
+        try {
+            // הולכים לשרת לבדוק מה הסיסמה של הכיתה הזו באמת
+            const q = query(collection(db, "classes"), where("code", "==", classCode));
+            const classSnap = await getDocs(q);
+            
+            if (!classSnap.empty) {
+                const teacherId = classSnap.docs[0].data().teacherId; // מחרוזת של "שם_סיסמה"
+                const actualPass = teacherId.split('_')[1]; // חילוץ הסיסמה מהמחרוזת
+
+                if (userInput === actualPass) {
+                    await deleteDoc(doc(db, "tasks", taskId));
+                } else {
+                    alert("הסיסמה שגויה! המשימה לא נמחקה.");
+                }
+            } else {
+                alert("שגיאה בזיהוי הכיתה.");
+            }
+        } catch (error) {
+            alert("שגיאה בתקשורת עם השרת: " + error.message);
+        }
+    };
+
+    window.logout = () => { localStorage.clear(); location.reload(); };
+    window.onload = () => {
+        const u = localStorage.getItem('teacherUser');
+        const p = localStorage.getItem('teacherPass');
+        if(u && p) login(u, p);
+    };
 </script>
 </body>
 </html>
