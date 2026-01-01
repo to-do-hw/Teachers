@@ -1,330 +1,312 @@
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ממשק ניהול מורים פרימיום - I4RWI</title>
-    <style>
-        :root {
-            --primary: #1e3a8a;
-            --primary-light: #3b82f6;
-            --accent: #10b981;
-            --danger: #ef4444;
-            --bg: #f1f5f9;
-            --white: #ffffff;
-            --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title> ניהול משימות ראלי מטו"ס- מורים </title>
+<style>
+:root {
+--primary: #10b981;
+--accent: #3b82f6;
+--purple: #8b5cf6;
+--edit: #f59e0b;
+--danger: #ef4444;
+--glass-bg: rgba(255, 255, 255, 0.1);
+--glass-border: rgba(255, 255, 255, 0.2);
+}
 
-        body {
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            background-color: var(--bg);
-            margin: 0; padding: 40px 20px;
-            direction: rtl; color: #1e293b;
-        }
+/* רקע נוזלי דינמי [cite: 17, 18] */
+body {
+font-family: 'Segoe UI', system-ui, sans-serif;
+margin: 0; padding: 20px; direction: rtl;
+min-height: 100vh; color: white; overflow-x: hidden;
+background: linear-gradient(125deg, #064e3b, #1e3a8a, #4c1d95, #064e3b);
+background-size: 400% 400%;
+animation: gradientBG 15s ease infinite; [cite: 19-29]
+}
 
-        .admin-wrapper {
-            max-width: 800px;
-            margin: auto;
-        }
+@keyframes gradientBG {
+0% { background-position: 0% 50%; }
+50% { background-position: 100% 50%; }
+100% { background-position: 0% 50%; } [cite: 30-34]
+}
 
-        .header {
-            text-align: center;
-            margin-bottom: 40px;
-            animation: fadeInDown 0.6s ease-out;
-        }
+.stars {
+position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+pointer-events: none;
+background: transparent url('https://www.transparenttextures.com/patterns/stardust.png') repeat;
+opacity: 0.3; z-index: 0; [cite: 35-42]
+}
 
-        .header h1 {
-            font-size: 32px;
-            color: var(--primary);
-            margin: 0;
-        }
+.blob {
+position: fixed; width: 500px; height: 500px;
+background: radial-gradient(circle, rgba(16,185,129,0.3) 0%, rgba(0,0,0,0) 70%);
+border-radius: 50%; z-index: -1; filter: blur(80px);
+animation: move 20s infinite alternate; [cite: 43-52]
+}
 
-        .header p {
-            color: #64748b;
-            margin-top: 10px;
-        }
+@keyframes move {
+from { transform: translate(-20%, -20%); }
+to { transform: translate(20%, 20%); } [cite: 53-56]
+}
 
-        .card {
-            background: var(--white);
-            padding: 40px;
-            border-radius: 24px;
-            box-shadow: var(--shadow);
-            margin-bottom: 30px;
-            border: 1px solid rgba(255,255,255,0.7);
-        }
+.card {
+position: relative; z-index: 1; background: var(--glass-bg);
+padding: 30px; border-radius: 28px; max-width: 800px; margin: 40px auto;
+backdrop-filter: blur(25px) saturate(200%); -webkit-backdrop-filter: blur(25px) saturate(200%);
+border: 1px solid var(--glass-border); box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4); [cite: 57-69]
+}
 
-        .form-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
+input {
+width: 100%; padding: 14px; margin: 10px 0; border-radius: 15px;
+border: 1px solid var(--glass-border); background: rgba(0,0,0,0.2);
+color: white; box-sizing: border-box; outline: none; [cite: 70-75]
+}
 
-        @media (max-width: 600px) {
-            .form-grid { grid-template-columns: 1fr; }
-        }
+button {
+background: linear-gradient(135deg, var(--primary), var(--accent));
+color: white; border: none; font-weight: bold; cursor: pointer;
+transition: 0.3s; border-radius: 15px; padding: 14px; [cite: 76-80]
+}
 
-        .input-group {
-            margin-bottom: 20px;
-        }
+.class-box {
+background: rgba(255, 255, 255, 0.05); border: 1px solid var(--glass-border);
+padding: 20px; border-radius: 22px; margin-top: 30px; [cite: 81-85]
+}
 
-        .input-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            font-size: 14px;
-            color: #475569;
-        }
+.time-settings {
+display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+background: rgba(0,0,0,0.3); padding: 15px; border-radius: 18px; margin-bottom: 15px; [cite: 86-89]
+}
 
-        input {
-            width: 100%;
-            padding: 14px 18px;
-            border: 2px solid #e2e8f0;
-            border-radius: 14px;
-            font-size: 16px;
-            transition: all 0.3s ease;
-            box-sizing: border-box;
-            background: #f8fafc;
-        }
+.time-settings label { font-size: 12px; color: var(--primary); font-weight: bold; display: block; margin-bottom: 5px; [cite: 90] }
 
-        input:focus {
-            border-color: var(--primary-light);
-            outline: none;
-            background: #fff;
-            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
-        }
+.task-item {
+background: rgba(255, 255, 255, 0.07); border: 1px solid var(--glass-border);
+padding: 18px; margin: 15px 0; border-radius: 18px; [cite: 91-95]
+}
 
-        button.main-btn {
-            grid-column: span 2;
-            background: var(--primary);
-            color: white;
-            padding: 16px;
-            border: none;
-            border-radius: 14px;
-            font-size: 18px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 10px;
-            box-shadow: 0 4px 6px rgba(30, 58, 138, 0.2);
-        }
+.task-img-preview { max-width: 100%; border-radius: 15px; margin-top: 10px; border: 1px solid var(--glass-border); [cite: 96] }
 
-        @media (max-width: 600px) {
-            button.main-btn { grid-column: span 1; }
-        }
-
-        button.main-btn:hover {
-            background: #1e40af;
-            transform: translateY(-2px);
-            box-shadow: 0 10px 15px rgba(30, 58, 138, 0.3);
-        }
-
-        .tasks-list-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .task-card {
-            background: white;
-            padding: 20px;
-            border-radius: 18px;
-            margin-bottom: 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border: 1px solid #e2e8f0;
-            transition: all 0.3s ease;
-            animation: slideIn 0.5s ease-out;
-        }
-
-        .task-card:hover {
-            border-color: var(--primary-light);
-            transform: translateX(-5px);
-        }
-
-        .task-meta h3 {
-            margin: 0 0 5px 0;
-            font-size: 18px;
-        }
-
-        .task-meta p {
-            margin: 0;
-            font-size: 13px;
-            color: #64748b;
-        }
-
-        .tag {
-            background: #e0f2fe;
-            color: #0369a1;
-            padding: 4px 10px;
-            border-radius: 8px;
-            font-weight: 600;
-            font-size: 12px;
-            margin-left: 10px;
-        }
-
-        .delete-btn {
-            background: #fee2e2;
-            color: var(--danger);
-            border: none;
-            padding: 10px 18px;
-            border-radius: 10px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-
-        .delete-btn:hover {
-            background: var(--danger);
-            color: white;
-        }
-
-        @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateX(20px); }
-            to { opacity: 1; transform: translateX(0); }
-        }
-
-        .loader {
-            text-align: center;
-            padding: 40px;
-            color: #64748b;
-        }
-    </style>
+.file-label { cursor: pointer; background: var(--glass-bg); padding: 12px; border-radius: 12px; border: 1px dashed var(--glass-border); [cite: 97] }
+.hidden { display: none; [cite: 98] }
+</style>
 </head>
 <body>
 
-<div class="admin-wrapper">
-    <div class="header">
-        <h1>לוח בקרה למורה 🍎</h1>
-        <p>ניהול משימות לכיתה I4RWI</p>
-    </div>
+<div class="stars"></div>
+<div class="blob"></div>
 
-    <div class="card">
-        <div class="form-grid">
-            <div class="input-group">
-                <label>קוד כיתה</label>
-                <input type="text" id="classCode" value="I4RWI" readonly style="background: #f1f5f9; cursor: not-allowed;">
-            </div>
-            <div class="input-group">
-                <label>כותרת המשימה</label>
-                <input type="text" id="taskTitle" placeholder="לדוגמה: הגשת פרויקט סיום">
-            </div>
-            <div class="input-group">
-                <label>מועד הגשה</label>
-                <input type="datetime-local" id="taskDate">
-            </div>
-            <div class="input-group">
-                <label>קישור לתמונה (URL)</label>
-                <input type="text" id="imgUrl" placeholder="הדבק כאן קישור לתמונה">
-            </div>
-            <button class="main-btn" onclick="saveTask()">✨ פרסם משימה חדשה</button>
-        </div>
-    </div>
+<div class="card">
+<div id="loginArea">
+<h2> ✨ כניסה למערכת </h2>
+<input type="text" id="teacherUser" placeholder="שם משתמש">
+<input type="password" id="teacherPass" placeholder="סיסמה">
+<button onclick="login()" style="width: 100%;">התחברות</button>
+</div>
 
-    <div class="tasks-list-header">
-        <h2>משימות שפורסמו</h2>
-        <span id="taskCount" class="tag">0 משימות</span>
-    </div>
+<div id="dashboard" style="display:none;">
+<div style="display:flex; justify-content: space-between; align-items: center;">
+<h3>היי, <span id="displayName" style="color: var(--primary);"></span> ✨</h3>
+<button onclick="logout()" style="background:var(--danger); padding:8px 15px;">יציאה</button>
+</div>
 
-    <div id="adminTaskList">
-        <div class="loader">טוען נתונים מהשרת...</div>
-    </div>
+<div class="class-box" style="margin-top:20px;">
+<h4>צור כיתה חדשה</h4>
+<div style="display:flex; gap:10px;">
+<input type="text" id="newClassName" placeholder="שם הכיתה">
+<button onclick="createClass()" style="min-width: 100px;">צור</button>
+</div>
+</div>
+
+<div id="classesList">טוען נתונים...</div>
+</div>
 </div>
 
 <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getFirestore, collection, addDoc, onSnapshot, doc, deleteDoc, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getFirestore, collection, addDoc, query, where, onSnapshot, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-    const firebaseConfig = {
-        apiKey: "AIzaSyDvnS8L9r2LMKcUD78Ix7bldVp9qzbYwtk",
-        authDomain: "tast-7808e.firebaseapp.com",
-        projectId: "tast-7808e",
-        storageBucket: "tast-7808e.firebasestorage.app",
-        messagingSenderId: "99024860024",
-        appId: "1:99024860024:web:24ab70c10254a2014fce8d"
-    };
+const firebaseConfig = {
+apiKey: "AIzaSyDvnS8L9r2LMKcUD78Ix7bldVp9qzbYwtk",
+authDomain: "tast-7808e.firebaseapp.com",
+projectId: "tast-7808e",
+storageBucket: "tast-7808e.firebasestorage.app",
+messagingSenderId: "99024860024",
+appId: "1:99024860024:web:24ab70c10254a2014fce8d"
+}; [cite: 126-136]
 
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app); [cite: 137, 138]
 
-    // פונקציית שמירה
-    window.saveTask = async () => {
-        const title = document.getElementById('taskTitle').value.trim();
-        const date = document.getElementById('taskDate').value;
-        const code = document.getElementById('classCode').value;
-        const img = document.getElementById('imgUrl').value.trim();
+let teacherKey = "";
+let selectedImages = {}; [cite: 139, 140]
 
-        if(!title || !date) {
-            alert("נא למלא כותרת ותאריך הגשה");
-            return;
+// פונקציית הקטנת תמונה [cite: 141]
+async function compressImage(base64Str) {
+return new Promise((resolve) => {
+const img = new Image();
+img.src = base64Str;
+img.onload = () => {
+const canvas = document.createElement('canvas');
+let width = img.width, height = img.height;
+const max = 800;
+if (width > height && width > max) { height *= max / width; width = max; }
+else if (height > max) { width *= max / height; height = max; }
+canvas.width = width; canvas.height = height;
+const ctx = canvas.getContext('2d');
+ctx.drawImage(img, 0, 0, width, height);
+resolve(canvas.toDataURL('image/jpeg', 0.6));
+};
+});
+} [cite: 142-158]
+
+// לוגיקת התחברות עם זיכרון [cite: 159]
+window.login = (userVal, passVal) => {
+const user = userVal || document.getElementById('teacherUser').value.trim();
+const pass = passVal || document.getElementById('teacherPass').value.trim();
+if(!user || !pass) return;
+
+teacherKey = user + "_" + pass;
+localStorage.setItem('teacherUser', user);
+localStorage.setItem('teacherPass', pass);
+
+document.getElementById('displayName').innerText = user;
+document.getElementById('loginArea').style.display = 'none';
+document.getElementById('dashboard').style.display = 'block';
+loadClasses();
+}; [cite: 160-171]
+
+window.logout = () => {
+localStorage.clear();
+location.reload();
+}; [cite: 172-175]
+
+window.addEventListener('DOMContentLoaded', () => {
+const u = localStorage.getItem('teacherUser');
+const p = localStorage.getItem('teacherPass');
+if(u && p) window.login(u, p);
+}); [cite: 176-181]
+
+window.createClass = async () => {
+const name = document.getElementById('newClassName').value.trim();
+if(!name) return;
+const code = Math.random().toString(36).substring(2, 7).toUpperCase();
+await addDoc(collection(db, "classes"), { teacherId: teacherKey, name, code });
+document.getElementById('newClassName').value = '';
+}; [cite: 182-188]
+
+window.handleImg = (e, code) => {
+const reader = new FileReader();
+reader.onload = async (ev) => {
+selectedImages[code] = await compressImage(ev.target.result);
+document.getElementById(`label_${code}`).innerText = "✅ תמונה מוכנה";
+};
+reader.readAsDataURL(e.target.files[0]);
+}; [cite: 189-196]
+
+function loadClasses() {
+onSnapshot(query(collection(db, "classes"), where("teacherId", "==", teacherKey)), (snap) => {
+const list = document.getElementById('classesList');
+list.innerHTML = '';
+snap.forEach(cDoc => {
+const c = cDoc.data();
+const now = new Date().toISOString().slice(0, 16);
+const tomorrow = new Date(Date.now() + 86400000).toISOString().slice(0, 16);
+const div = document.createElement('div');
+div.className = 'class-box';
+div.innerHTML = `
+<div style="display:flex; justify-content:space-between; margin-bottom:15px;">
+<strong>🏫 ${c.name}</strong>
+<span style="background:var(--purple); padding:2px 8px; border-radius:5px;">${c.code}</span>
+</div>
+
+<div class="time-settings">
+<div>
+<label>זמן התחלה</label>
+<input type="datetime-local" id="start_${c.code}" value="${now}">
+</div>
+<div>
+<label>זמן סיום</label>
+<input type="datetime-local" id="end_${c.code}" value="${tomorrow}">
+</div>
+</div>
+
+<div style="display:flex; gap:10px;">
+<input type="text" id="task_${c.code}" placeholder="תיאור המשימה...">
+<label class="file-label" id="label_${c.code}">📷<input type="file" class="hidden" onchange="handleImg(event, '${c.code}')"></label>
+</div>
+<button onclick="addTask('${c.code}')" style="width:100%; margin-top:10px;">פרסם משימה</button>
+<div id="tasks_${c.code}"></div>
+`;
+list.appendChild(div);
+syncTasks(c.code);
+});
+});
+} [cite: 197-233]
+
+window.addTask = async (code) => {
+const title = document.getElementById(`task_${code}`).value;
+const start = document.getElementById(`start_${code}`).value;
+const end = document.getElementById(`end_${code}`).value;
+const img = selectedImages[code] || null;
+
+if(!title && !img) {
+alert("נא להזין תיאור או לבחור תמונה");
+return;
+}
+
+try {
+await addDoc(collection(db, "tasks"), {
+classCode: code,
+title: title || "משימה חדשה",
+imageUrl: img,
+startTime: new Date(start).getTime(),
+endTime: new Date(end).getTime(),
+createdAt: Date.now()
+});
+
+document.getElementById(`task_${code}`).value = '';
+selectedImages[code] = null;
+document.getElementById(`label_${code}`).innerText = "📷";
+} catch (e) {
+alert("שגיאה בפרסום: " + e.message);
+}
+}; [cite: 234-258]
+
+function syncTasks(code) {
+onSnapshot(query(collection(db, "tasks"), where("classCode", "==", code)), (snap) => {
+const container = document.getElementById(`tasks_${code}`);
+if(!container) return;
+container.innerHTML = '';
+snap.forEach(tDoc => {
+const t = tDoc.data();
+const item = document.createElement('div');
+item.className = 'task-item';
+item.innerHTML = `
+<div style="display:flex; justify-content:space-between; align-items:center;">
+<b>${t.title}</b>
+<button style="background:var(--danger); padding:5px 10px; font-size:12px;" onclick="deleteTaskSecurity('${tDoc.id}')">🗑️</button>
+</div>
+${t.imageUrl ? `<img src="${t.imageUrl}" class="task-img-preview">` : ''}
+`;
+container.appendChild(item);
+});
+});
+} [cite: 259-278]
+
+// פונקציית מחיקה עם סיסמה (החלק החדש המאובטח)
+window.deleteTaskSecurity = async (id) => {
+    const pass = prompt("הכנס סיסמת מנהל למחיקה (todo2026!):");
+    if (pass === "todo2026!") {
+        if(confirm("למחוק את המשימה לצמיתות?")) {
+            await deleteDoc(doc(db, 'tasks', id));
+            alert("המשימה נמחקה.");
         }
-
-        try {
-            await addDoc(collection(db, "tasks"), {
-                classCode: code,
-                title: title,
-                endTime: new Date(date).getTime(),
-                imageUrl: img,
-                createdAt: Date.now()
-            });
-            
-            alert("המשימה נוספה בהצלחה!");
-            document.getElementById('taskTitle').value = '';
-            document.getElementById('imgUrl').value = '';
-            document.getElementById('taskDate').value = '';
-        } catch (error) {
-            alert("שגיאה בשמירה: " + error.message);
-        }
-    };
-
-    // האזנה למשימות בזמן אמת
-    const q = query(collection(db, "tasks"), orderBy("createdAt", "desc"));
-    onSnapshot(q, (snapshot) => {
-        const listDiv = document.getElementById('adminTaskList');
-        document.getElementById('taskCount').innerText = snapshot.size + " משימות";
-        
-        if (snapshot.empty) {
-            listDiv.innerHTML = '<div class="card" style="text-align:center; color:#64748b;">אין משימות פעילות. צור אחת למעלה!</div>';
-            return;
-        }
-
-        listDiv.innerHTML = '';
-        snapshot.forEach(tDoc => {
-            const t = tDoc.data();
-            const dateStr = new Date(t.endTime).toLocaleString('he-IL', {
-                day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit'
-            });
-
-            const taskItem = document.createElement('div');
-            taskItem.className = 'task-card';
-            taskItem.innerHTML = `
-                <div class="task-meta">
-                    <h3>${t.title}</h3>
-                    <p>🕒 הגשה עד: ${dateStr} | כיתה: <span class="tag">${t.classCode}</span></p>
-                </div>
-                <button class="delete-btn" onclick="secureDelete('${tDoc.id}')">מחיקה</button>
-            `;
-            listDiv.appendChild(taskItem);
-        });
-    });
-
-    // מחיקה מאובטחת
-    window.secureDelete = async (id) => {
-        const pass = prompt("הכנס סיסמת מנהל למחיקה:");
-        if (pass === "todo2026!") {
-            if (confirm("האם אתה בטוח שברצונך למחוק משימה זו?")) {
-                await deleteDoc(doc(db, "tasks", id));
-            }
-        } else if (pass !== null) {
-            alert("סיסמה שגויה!");
-        }
-    };
+    } else if (pass !== null) {
+        alert("סיסמה שגויה!");
+    }
+}; 
 </script>
 </body>
 </html>
