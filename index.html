@@ -37,7 +37,10 @@ body {
 
 .stars {
     position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     pointer-events: none;
     background: transparent url('https://www.transparenttextures.com/patterns/stardust.png') repeat;
     opacity: 0.3;
@@ -74,42 +77,80 @@ body {
     box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
 }
 
-input { 
-    width: 100%; padding: 14px; margin: 10px 0; border-radius: 15px; 
-    border: 1px solid var(--glass-border); 
-    background: rgba(0,0,0,0.2); 
-    color: white; box-sizing: border-box; outline: none;
+input {
+    width: 100%;
+    padding: 14px;
+    margin: 10px 0;
+    border-radius: 15px;
+    border: 1px solid var(--glass-border);
+    background: rgba(0,0,0,0.2);
+    color: white;
+    box-sizing: border-box;
+    outline: none;
 }
 
-button { 
-    background: linear-gradient(135deg, var(--primary), var(--accent)); 
-    color: white; border: none; font-weight: bold; cursor: pointer; 
-    transition: 0.3s; border-radius: 15px; padding: 14px;
+button {
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    color: white;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+    border-radius: 15px;
+    padding: 14px;
 }
 
-.class-box { 
-    background: rgba(255, 255, 255, 0.05); 
-    border: 1px solid var(--glass-border); 
-    padding: 20px; border-radius: 22px; margin-top: 30px; 
+.class-box {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    padding: 20px;
+    border-radius: 22px;
+    margin-top: 30px;
 }
 
-.time-settings { 
-    display: grid; grid-template-columns: 1fr 1fr; gap: 10px; 
-    background: rgba(0,0,0,0.3); padding: 15px; border-radius: 18px; margin-bottom: 15px; 
+.time-settings {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    background: rgba(0,0,0,0.3);
+    padding: 15px;
+    border-radius: 18px;
+    margin-bottom: 15px;
 }
 
-.time-settings label { font-size: 12px; color: var(--primary); font-weight: bold; display: block; margin-bottom: 5px; }
-
-.task-item { 
-    background: rgba(255, 255, 255, 0.07); 
-    border: 1px solid var(--glass-border); 
-    padding: 18px; margin: 15px 0; border-radius: 18px; 
+.time-settings label {
+    font-size: 12px;
+    color: var(--primary);
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
 }
 
-.task-img-preview { max-width: 100%; border-radius: 15px; margin-top: 10px; border: 1px solid var(--glass-border); }
+.task-item {
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid var(--glass-border);
+    padding: 18px;
+    margin: 15px 0;
+    border-radius: 18px;
+}
 
-.file-label { cursor: pointer; background: var(--glass-bg); padding: 12px; border-radius: 12px; border: 1px dashed var(--glass-border); }
+.task-img-preview {
+    max-width: 100%;
+    border-radius: 15px;
+    margin-top: 10px;
+    border: 1px solid var(--glass-border);
+}
+
+.file-label {
+    cursor: pointer;
+    background: var(--glass-bg);
+    padding: 12px;
+    border-radius: 12px;
+    border: 1px dashed var(--glass-border);
+}
+
 .hidden { display: none; }
+
 </style>
 </head>
 <body>
@@ -119,7 +160,7 @@ button {
 
 <div class="card">
     <div id="loginArea">
-        <h2> ✨ כניסה למערכת </h2>
+        <h2> ✨  כניסה למערכת </h2>
         <input type="text" id="teacherUser" placeholder="שם משתמש">
         <input type="password" id="teacherPass" placeholder="סיסמה">
         <button onclick="login()" style="width: 100%;">התחברות</button>
@@ -130,7 +171,7 @@ button {
             <h3>היי, <span id="displayName" style="color: var(--primary);"></span> ✨</h3>
             <button onclick="logout()" style="background:var(--danger); padding:8px 15px;">יציאה</button>
         </div>
-        
+
         <div class="class-box" style="margin-top:20px;">
             <h4>צור כיתה חדשה</h4>
             <div style="display:flex; gap:10px;">
@@ -162,14 +203,15 @@ const db = getFirestore(app);
 let teacherKey = "";
 let selectedImages = {};
 
-// פונקציית הקטנת תמונה (נשמרת כדי למנוע את שגיאת הגודל שקיבלת)
+// פונקציית הקטנת תמונה
 async function compressImage(base64Str) {
     return new Promise((resolve) => {
         const img = new Image();
         img.src = base64Str;
         img.onload = () => {
             const canvas = document.createElement('canvas');
-            let width = img.width, height = img.height;
+            let width = img.width;
+            let height = img.height;
             const max = 800;
             if (width > height && width > max) { height *= max / width; width = max; }
             else if (height > max) { width *= max / height; height = max; }
@@ -181,19 +223,22 @@ async function compressImage(base64Str) {
     });
 }
 
-// לוגיקת התחברות עם זיכרון
 window.login = (userVal, passVal) => {
     const user = userVal || document.getElementById('teacherUser').value.trim();
     const pass = passVal || document.getElementById('teacherPass').value.trim();
+    
     if(!user || !pass) return;
 
     teacherKey = user + "_" + pass;
+    
+    // שמירה בזיכרון לחיבור אוטומטי
     localStorage.setItem('teacherUser', user);
     localStorage.setItem('teacherPass', pass);
 
     document.getElementById('displayName').innerText = user;
     document.getElementById('loginArea').style.display = 'none';
     document.getElementById('dashboard').style.display = 'block';
+    
     loadClasses();
 };
 
@@ -202,7 +247,7 @@ window.logout = () => {
     location.reload();
 };
 
-// טעינה אוטומטית אם מחובר
+// חיבור אוטומטי
 window.addEventListener('DOMContentLoaded', () => {
     const u = localStorage.getItem('teacherUser');
     const p = localStorage.getItem('teacherPass');
@@ -213,7 +258,11 @@ window.createClass = async () => {
     const name = document.getElementById('newClassName').value.trim();
     if(!name) return;
     const code = Math.random().toString(36).substring(2, 7).toUpperCase();
-    await addDoc(collection(db, "classes"), { teacherId: teacherKey, name, code });
+    await addDoc(collection(db, "classes"), {
+        teacherId: teacherKey,
+        name: name,
+        code: code
+    });
     document.getElementById('newClassName').value = '';
 };
 
@@ -234,6 +283,7 @@ function loadClasses() {
             const c = cDoc.data();
             const now = new Date().toISOString().slice(0, 16);
             const tomorrow = new Date(Date.now() + 86400000).toISOString().slice(0, 16);
+            
             const div = document.createElement('div');
             div.className = 'class-box';
             div.innerHTML = `
@@ -241,7 +291,7 @@ function loadClasses() {
                     <strong>🏫 ${c.name}</strong>
                     <span style="background:var(--purple); padding:2px 8px; border-radius:5px;">${c.code}</span>
                 </div>
-                
+
                 <div class="time-settings">
                     <div>
                         <label>זמן התחלה</label>
@@ -258,6 +308,7 @@ function loadClasses() {
                     <label class="file-label" id="label_${c.code}">📷<input type="file" class="hidden" onchange="handleImg(event, '${c.code}')"></label>
                 </div>
                 <button onclick="addTask('${c.code}')" style="width:100%; margin-top:10px;">פרסם משימה</button>
+                
                 <div id="tasks_${c.code}"></div>
             `;
             list.appendChild(div);
@@ -278,8 +329,8 @@ window.addTask = async (code) => {
     }
 
     try {
-        await addDoc(collection(db, "tasks"), { 
-            classCode: code, 
+        await addDoc(collection(db, "tasks"), {
+            classCode: code,
             title: title || "משימה חדשה", 
             imageUrl: img,
             startTime: new Date(start).getTime(),
@@ -307,7 +358,7 @@ function syncTasks(code) {
             item.innerHTML = `
                 <div style="display:flex; justify-content:space-between; align-items:center;">
                     <b>${t.title}</b>
-                    <button style="background:var(--danger); padding:5px 10px; font-size:12px;" onclick="deleteTask('${tDoc.id}')">🗑️</button>
+                    <button style="background:var(--danger); padding:5px 10px; font-size:12px; cursor:pointer;" onclick="deleteTask('${tDoc.id}')">🗑️</button>
                 </div>
                 ${t.imageUrl ? `<img src="${t.imageUrl}" class="task-img-preview">` : ''}
             `;
@@ -316,12 +367,22 @@ function syncTasks(code) {
     });
 }
 
-window.deleteTask = async (id) => { if(confirm("למחוק את המשימה?")) await deleteDoc(doc(db, 'tasks', id)); };
+// פונקציית המחיקה המאובטחת המבוססת על סיסמת המורה
+window.deleteTask = async (id) => { 
+    const passConfirm = prompt("פעולה זו תמחוק את המשימה לצמיתות.\nאנא הזן את סיסמת ההתחברות שלך לאישור:");
+    const teacherPass = localStorage.getItem('teacherPass');
+
+    if(passConfirm === teacherPass) {
+        try {
+            await deleteDoc(doc(db, "tasks", id));
+        } catch (e) {
+            alert("שגיאה במחיקה: " + e.message);
+        }
+    } else if (passConfirm !== null) {
+        alert("סיסמה שגויה. המשימה לא נמחקה.");
+    }
+};
+
 </script>
 </body>
 </html>
-
-
-
-
-
