@@ -1,120 +1,143 @@
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>ניהול משימות ראלי מטו"ס - מורים</title>
-<style>
-:root {
-    --primary: #10b981; --accent: #3b82f6; --purple: #8b5cf6; --edit: #f59e0b; --danger: #ef4444;
-    --glass-bg: rgba(255, 255, 255, 0.1); --glass-border: rgba(255, 255, 255, 0.2);
-}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>ניהול משימות מורים - גרסה מלאה</title>
+    <style>
+        :root {
+            --primary: #10b981; --accent: #3b82f6; --purple: #8b5cf6; --edit: #f59e0b; --danger: #ef4444;
+            --glass: rgba(255, 255, 255, 0.12); --glass-border: rgba(255, 255, 255, 0.25);
+        }
 
-@keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-@keyframes scaleIn { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-@keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+        @keyframes gradientMove { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-body {
-    font-family: -apple-system, system-ui, sans-serif;
-    margin: 0; padding: 15px; direction: rtl; min-height: 100vh; color: white; overflow-x: hidden;
-    background: linear-gradient(125deg, #064e3b, #1e3a8a, #4c1d95, #064e3b);
-    background-size: 400% 400%; animation: gradientBG 15s ease infinite;
-}
+        body {
+            font-family: -apple-system, system-ui, sans-serif;
+            margin: 0; padding: 0; direction: rtl; min-height: 100vh; color: white;
+            background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #4338ca 100%);
+            background-size: 400% 400%; animation: gradientMove 12s ease infinite;
+        }
 
-.container { width: 100%; max-width: 600px; margin: 0 auto; }
+        .dashboard-header {
+            background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+            padding: 20px; position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid var(--glass-border);
+        }
 
-.card {
-    background: var(--glass-bg); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
-    border: 1px solid var(--glass-border); border-radius: 35px; padding: 25px;
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4); animation: scaleIn 0.5s ease; margin-bottom: 20px;
-}
+        .nav-tabs { display: flex; gap: 10px; margin-top: 15px; overflow-x: auto; scrollbar-width: none; }
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.1); border: 1px solid var(--glass-border);
+            color: white; padding: 12px 22px; border-radius: 18px; cursor: pointer; transition: 0.3s; font-weight: bold; white-space: nowrap;
+        }
+        .nav-btn.active { background: white; color: #1e3a8a; }
 
-input, select {
-    width: 100%; padding: 16px; margin: 10px 0; border-radius: 18px;
-    border: 1px solid var(--glass-border); background: rgba(0,0,0,0.3);
-    color: white; font-size: 17px; outline: none; box-sizing: border-box; transition: 0.3s;
-}
+        .container { padding: 20px; max-width: 700px; margin: 0 auto; }
 
-.password-container { position: relative; }
-.toggle-password { position: absolute; left: 15px; top: 25px; cursor: pointer; font-size: 22px; z-index: 10; }
+        .card {
+            background: var(--glass); backdrop-filter: blur(20px); border: 1px solid var(--glass-border);
+            border-radius: 30px; padding: 25px; margin-bottom: 20px; animation: fadeInUp 0.5s ease;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
 
-button {
-    width: 100%; padding: 16px; border-radius: 18px; border: none;
-    font-weight: 900; font-size: 17px; cursor: pointer; transition: 0.3s;
-    display: flex; align-items: center; justify-content: center; gap: 10px;
-}
-.btn-primary { background: white; color: #1e3a8a; }
-.btn-save { background: var(--primary); color: white; margin-top: 10px; }
+        input, select, textarea {
+            width: 100%; padding: 16px; margin: 10px 0; border-radius: 15px;
+            border: 1px solid var(--glass-border); background: rgba(0,0,0,0.2);
+            color: white; font-size: 16px; outline: none; box-sizing: border-box;
+        }
 
-.class-section { border-bottom: 2px solid rgba(255,255,255,0.1); padding-bottom: 20px; margin-bottom: 20px; }
+        .pass-box { position: relative; }
+        .eye-icon { position: absolute; left: 15px; top: 25px; cursor: pointer; font-size: 20px; z-index: 10; }
 
-/* עיצוב משימות */
-.task-item {
-    background: rgba(255, 255, 255, 0.08); border-radius: 22px; padding: 18px;
-    margin-top: 15px; border-right: 5px solid var(--accent);
-    animation: fadeInUp 0.5s ease-out backwards;
-}
-.task-header { display: flex; justify-content: space-between; align-items: flex-start; }
-.task-title { font-size: 20px; font-weight: 800; display: block; margin-top: 5px; }
-.task-date { font-size: 12px; color: #a7f3d0; font-weight: bold; background: rgba(16, 185, 129, 0.2); padding: 3px 8px; border-radius: 8px; }
+        button { width: 100%; padding: 16px; border-radius: 15px; border: none; font-weight: 800; cursor: pointer; transition: 0.2s; }
+        .btn-main { background: white; color: #1e3a8a; }
+        .btn-action { background: var(--primary); color: white; margin-top: 10px; }
 
-.task-img-preview { width: 100%; height: 160px; object-fit: cover; border-radius: 15px; margin-top: 12px; border: 1px solid var(--glass-border); }
+        /* Task Card and Image */
+        .task-card {
+            background: rgba(255,255,255,0.08); border-radius: 20px; padding: 20px;
+            margin-bottom: 15px; border-right: 6px solid var(--accent);
+            display: flex; flex-direction: column; gap: 15px;
+        }
+        .task-top { display: flex; justify-content: space-between; align-items: flex-start; }
+        .task-info b { font-size: 20px; display: block; margin-bottom: 5px; }
+        .task-info span { font-size: 13px; opacity: 0.7; }
 
-.action-btns { display: flex; gap: 8px; }
-.btn-sm { width: auto; padding: 8px 12px; border-radius: 10px; font-size: 13px; }
+        .task-img {
+            width: 100%; max-height: 300px; object-fit: contain; border-radius: 15px;
+            background: rgba(0,0,0,0.2); border: 1px solid var(--glass-border);
+        }
 
-.hidden { display: none; }
-</style>
+        .btn-group { display: flex; gap: 10px; }
+        .icon-btn { width: 45px; height: 45px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 20px; cursor: pointer; }
+        .del-btn { background: rgba(239, 68, 68, 0.2); color: var(--danger); }
+        .edit-btn { background: rgba(245, 158, 11, 0.2); color: var(--edit); }
+
+        .hidden { display: none; }
+        .lesson-row { display: flex; gap: 8px; margin-bottom: 8px; }
+        #fileStatus { font-size: 13px; color: var(--primary); margin-bottom: 10px; display: block; }
+    </style>
 </head>
 <body>
 
-<div class="container">
-    <div id="loginArea" class="card">
-        <h2 style="text-align:center;">כניסת מורה 🍎</h2>
+<div id="loginArea" class="container" style="padding-top: 15vh;">
+    <div class="card" style="text-align:center;">
+        <h1>ניהול משימות - מורה 🍎</h1>
         <input type="text" id="teacherUser" placeholder="שם משתמש">
-        <div class="password-container">
+        <div class="pass-box">
             <input type="password" id="teacherPass" placeholder="סיסמה">
-            <span class="toggle-password" onclick="togglePass()">👁️</span>
+            <span class="eye-icon" onclick="togglePass()">👁️</span>
         </div>
-        <button class="btn-primary" onclick="login()" style="margin-top: 15px;">התחברות</button>
+        <button class="btn-main" onclick="login()" style="margin-top:20px;">התחברות למערכת</button>
+    </div>
+</div>
+
+<div id="mainDashboard" class="hidden">
+    <div class="dashboard-header">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div><b id="userName" style="font-size:24px;"></b></div>
+            <div style="font-size:30px; cursor:pointer;" onclick="logout()">🏃‍♂️</div>
+        </div>
+        <div class="nav-tabs">
+            <button class="nav-btn active" onclick="switchTab('tasksTab', this)">משימות</button>
+            <button class="nav-btn" onclick="switchTab('classesTab', this)">כיתות</button>
+            <button class="nav-btn" onclick="switchTab('scheduleTab', this)">מערכת שעות</button>
+        </div>
     </div>
 
-    <div id="dashboard" class="hidden">
-        <div style="display:flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-            <h3>שלום, <span id="displayName" style="color:var(--primary)"></span></h3>
-            <button onclick="logout()" style="width:auto; padding:8px 12px; font-size:12px; background:var(--danger); color:white;">התנתק</button>
+    <div class="container">
+        <div id="tasksTab" class="tab-content">
+            <div class="card" id="formCard">
+                <h3 id="formTitle">📝 יצירת משימה</h3>
+                <input type="hidden" id="editingId">
+                <select id="taskClass"></select>
+                <input type="text" id="taskTitle" placeholder="כותרת המשימה">
+                <input type="datetime-local" id="taskEnd">
+                <input type="file" id="taskFile" accept="image/*" onchange="handleFile(this)">
+                <span id="fileStatus"></span>
+                <button id="submitBtn" class="btn-action" onclick="saveTask()">פרסם משימה</button>
+                <button id="cancelBtn" class="hidden" onclick="resetForm()" style="background:transparent; color:white;">ביטול עריכה</button>
+            </div>
+            <div id="taskListContainer"></div>
         </div>
 
-        <div class="card">
-            <h4>➕ יצירת כיתה חדשה</h4>
-            <div style="display:flex; gap:10px;">
-                <input type="text" id="newClassName" placeholder="שם הכיתה (למשל ז'8)">
-                <button onclick="createClass()" style="width:120px; background:var(--purple); color:white;">צור כיתה</button>
+        <div id="classesTab" class="tab-content hidden">
+            <div class="card">
+                <h3>➕ הוספת כיתה</h3>
+                <input type="text" id="newClassName" placeholder="שם הכיתה">
+                <button onclick="createClass()" style="background:var(--purple); color:white;">צור כיתה</button>
+            </div>
+            <div id="classesDisplay"></div>
+        </div>
+
+        <div id="scheduleTab" class="tab-content hidden">
+            <div class="card">
+                <h3>📅 עריכת מערכת שעות</h3>
+                <select id="schClass" onchange="loadSch()"></select>
+                <div id="schEditor"></div>
+                <button class="btn-action" onclick="saveSch()" style="margin-top:20px;">שמור מערכת</button>
             </div>
         </div>
-
-        <div class="card" id="formCard">
-            <h4 id="formTitle">📝 יצירת משימה</h4>
-            <select id="targetClass"></select>
-            <input type="text" id="taskTitle" placeholder="שם המשימה...">
-            
-            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
-                <div><small>התחלה:</small><input type="datetime-local" id="startTime"></div>
-                <div><small>הגשה עד:</small><input type="datetime-local" id="endTime"></div>
-            </div>
-
-            <label style="display:flex; align-items:center; justify-content:center; gap:10px; background:rgba(255,255,255,0.05); padding:15px; border-radius:15px; border:2px dashed var(--glass-border); cursor:pointer; margin: 10px 0;">
-                <span>📷</span> העלאת תמונה
-                <input type="file" class="hidden" id="fileInput" onchange="processFile(event)">
-            </label>
-            <div id="fileStatus" style="text-align:center; color:var(--primary); font-size:13px;"></div>
-            
-            <input type="hidden" id="editingId">
-            <button id="submitBtn" class="btn-save" onclick="saveTask()">פרסם משימה</button>
-            <button id="cancelBtn" class="hidden" onclick="resetForm()" style="background:none; border:1px solid white; color:white; margin-top:5px;">ביטול עריכה</button>
-        </div>
-
-        <div id="classesList"></div>
     </div>
 </div>
 
@@ -133,132 +156,147 @@ button {
 
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
-    let teacherKey = "", currentFileB64 = null;
+    let teacherKey = "";
+    let currentImageB64 = null;
+    let myClassCodes = [];
 
-    window.togglePass = () => { const p = document.getElementById('teacherPass'); p.type = p.type==='password'?'text':'password'; };
+    window.togglePass = () => { const p = document.getElementById('teacherPass'); p.type = p.type === 'password' ? 'text' : 'password'; };
 
     window.login = () => {
-        const u = document.getElementById('teacherUser').value.trim();
-        const p = document.getElementById('teacherPass').value.trim();
+        const u = document.getElementById('teacherUser').value.trim(), p = document.getElementById('teacherPass').value.trim();
         if(!u || !p) return;
         teacherKey = u + "_" + p;
         localStorage.setItem('teacherUser', u); localStorage.setItem('teacherPass', p);
-        document.getElementById('displayName').innerText = u;
+        document.getElementById('userName').innerText = "שלום, " + u;
         document.getElementById('loginArea').classList.add('hidden');
-        document.getElementById('dashboard').classList.remove('hidden');
-        loadData();
+        document.getElementById('mainDashboard').classList.remove('hidden');
+        initTeacher();
     };
 
-    window.logout = () => { localStorage.clear(); location.reload(); };
-
-    // פונקציית יצירת כיתה - חזרה לפעולה
-    window.createClass = async () => {
-        const name = document.getElementById('newClassName').value.trim();
-        if(!name) return;
-        const code = Math.random().toString(36).substring(2, 7).toUpperCase();
-        await addDoc(collection(db, "classes"), { teacherId: teacherKey, name: name, code: code });
-        document.getElementById('newClassName').value = '';
-        alert("כיתה נוצרה! הקוד: " + code);
+    window.handleFile = (input) => {
+        const file = input.files[0]; if(!file) return;
+        const reader = new FileReader();
+        reader.onload = (e) => { currentImageB64 = e.target.result; document.getElementById('fileStatus').innerText = "✅ תמונה נטענה"; };
+        reader.readAsDataURL(file);
     };
 
-    async function loadData() {
+    function initTeacher() {
         onSnapshot(query(collection(db, "classes"), where("teacherId", "==", teacherKey)), (snap) => {
-            const select = document.getElementById('targetClass');
-            const list = document.getElementById('classesList');
-            select.innerHTML = ''; list.innerHTML = '';
+            const tSel = document.getElementById('taskClass'), sSel = document.getElementById('schClass'), cDisp = document.getElementById('classesDisplay');
+            tSel.innerHTML = ''; sSel.innerHTML = '<option value="">בחר כיתה...</option>'; cDisp.innerHTML = '';
+            myClassCodes = [];
             snap.forEach(cDoc => {
-                const c = cDoc.data();
-                select.innerHTML += `<option value="${c.code}">${c.name}</option>`;
-                const div = document.createElement('div');
-                div.className = "class-section";
-                div.innerHTML = `<h3>🏫 כיתה: ${c.name} <small style="opacity:0.6; font-size:12px;">(קוד: ${c.code})</small></h3><div id="tasks_${c.code}"></div>`;
-                list.appendChild(div);
-                syncTasks(c.code);
+                const c = cDoc.data(); myClassCodes.push(c.code);
+                const opt = `<option value="${c.code}">${c.name}</option>`;
+                tSel.innerHTML += opt; sSel.innerHTML += opt;
+                cDisp.innerHTML += `<div class="card" style="padding:15px; margin-bottom:10px;"><b>${c.name}</b> (קוד: ${c.code})</div>`;
+            });
+            syncTasks();
+        });
+    }
+
+    function syncTasks() {
+        onSnapshot(collection(db, "tasks"), (snap) => {
+            const list = document.getElementById('taskListContainer');
+            list.innerHTML = '<h3>משימות פעילות:</h3>';
+            snap.forEach(tDoc => {
+                const t = tDoc.data();
+                if(t.teacherId === teacherKey || myClassCodes.includes(t.classCode)) {
+                    const date = new Date(t.endTime).toLocaleString('he-IL');
+                    // תמיכה בשני שמות השדות לתמונות (ישן וחדש)
+                    const imgSrc = t.fileData || t.imageUrl || t.image;
+                    const imgPreview = imgSrc ? `<img src="${imgSrc}" class="task-img">` : '';
+
+                    list.innerHTML += `
+                        <div class="task-card">
+                            <div class="task-top">
+                                <div class="task-info">
+                                    <b>${t.title}</b>
+                                    <span>📅 עד: ${date} | כיתה: ${t.classCode}</span>
+                                </div>
+                                <div class="btn-group">
+                                    <div class="icon-btn edit-btn" onclick="editT('${tDoc.id}')">✏️</div>
+                                    <div class="icon-btn del-btn" onclick="delT('${tDoc.id}')">🗑️</div>
+                                </div>
+                            </div>
+                            ${imgPreview}
+                        </div>`;
+                }
             });
         });
     }
 
-    window.processFile = (e) => {
-        const reader = new FileReader();
-        reader.onload = (ev) => { currentFileB64 = ev.target.result; document.getElementById('fileStatus').innerText = "✅ תמונה נטענה"; };
-        reader.readAsDataURL(e.target.files[0]);
-    };
-
     window.saveTask = async () => {
-        const title = document.getElementById('taskTitle').value;
-        const code = document.getElementById('targetClass').value;
-        const start = new Date(document.getElementById('startTime').value).getTime();
-        const end = new Date(document.getElementById('endTime').value).getTime();
-        const editId = document.getElementById('editingId').value;
-
-        if(!title || isNaN(end)) return alert("מלא כותרת ותאריך הגשה");
-        const data = { classCode: code, title, startTime: start, endTime: end };
-        if(currentFileB64) data.imageUrl = currentFileB64;
-
+        const title = document.getElementById('taskTitle').value, code = document.getElementById('taskClass').value, end = new Date(document.getElementById('taskEnd').value).getTime(), editId = document.getElementById('editingId').value;
+        if(!title || !end || !code) return alert("מלא פרטים");
+        const data = { title, classCode: code, endTime: end, teacherId: teacherKey, fileData: currentImageB64 };
         if(editId) await updateDoc(doc(db, "tasks", editId), data);
-        else await addDoc(collection(db, "tasks"), data);
+        else await addDoc(collection(db, "tasks"), { ...data, createdAt: Date.now() });
         resetForm();
     };
 
-    function syncTasks(code) {
-        onSnapshot(query(collection(db, "tasks"), where("classCode", "==", code)), (snap) => {
-            const container = document.getElementById(`tasks_${code}`);
-            if(!container) return;
-            let tasks = [];
-            snap.forEach(d => tasks.push({id: d.id, ...d.data()}));
-            tasks.sort((a,b) => a.endTime - b.endTime);
-
-            container.innerHTML = tasks.map((t, i) => `
-                <div class="task-item" style="animation-delay: ${i*0.1}s">
-                    <div class="task-header">
-                        <div>
-                            <span class="task-date">⌛ עד: ${new Date(t.endTime).toLocaleDateString('he-IL')} בשעה ${new Date(t.endTime).toLocaleTimeString('he-IL', {hour:'2-digit', minute:'2-digit'})}</span>
-                            <b class="task-title">${t.title}</b>
-                        </div>
-                        <div class="action-btns">
-                            <button class="btn-sm" style="background:var(--edit)" onclick="editTask('${t.id}')">✏️</button>
-                            <button class="btn-sm" style="background:var(--danger)" onclick="deleteTask('${t.id}')">🗑️</button>
-                        </div>
-                    </div>
-                    ${t.imageUrl ? `<img src="${t.imageUrl}" class="task-img-preview">` : ''}
-                </div>
-            `).join('');
-        });
-    }
-
-    window.editTask = async (id) => {
+    window.editT = async (id) => {
         const snap = await getDocs(collection(db, "tasks"));
         const t = snap.docs.find(d => d.id === id).data();
         document.getElementById('taskTitle').value = t.title;
-        document.getElementById('targetClass').value = t.classCode;
-        document.getElementById('startTime').value = new Date(t.startTime).toISOString().slice(0,16);
-        document.getElementById('endTime').value = new Date(t.endTime).toISOString().slice(0,16);
+        document.getElementById('taskClass').value = t.classCode;
+        document.getElementById('taskEnd').value = new Date(t.endTime).toISOString().slice(0, 16);
         document.getElementById('editingId').value = id;
-        document.getElementById('formTitle').innerText = "✏️ עריכת משימה";
-        document.getElementById('submitBtn').innerText = "שמור שינויים";
+        currentImageB64 = t.fileData || t.imageUrl || null;
+        document.getElementById('formTitle').innerText = "✏️ עריכה";
         document.getElementById('cancelBtn').classList.remove('hidden');
-        document.getElementById('formCard').scrollIntoView({behavior: 'smooth'});
+        document.getElementById('formCard').scrollIntoView({behavior:'smooth'});
     };
 
     window.resetForm = () => {
         document.getElementById('taskTitle').value = ''; document.getElementById('editingId').value = '';
-        document.getElementById('fileStatus').innerText = ''; currentFileB64 = null;
+        document.getElementById('taskFile').value = ''; document.getElementById('fileStatus').innerText = '';
+        currentImageB64 = null; document.getElementById('cancelBtn').classList.add('hidden');
         document.getElementById('formTitle').innerText = "📝 יצירת משימה";
-        document.getElementById('submitBtn').innerText = "פרסם משימה";
-        document.getElementById('cancelBtn').classList.add('hidden');
     };
 
-    window.deleteTask = async (id) => {
-        const pass = prompt("הזן סיסמת מורה לאישור מחיקה:");
-        if(pass === localStorage.getItem('teacherPass')) {
-            await deleteDoc(doc(db, "tasks", id));
-        } else if(pass !== null) alert("סיסמה שגויה");
+    window.delT = async (id) => { if(confirm("למחוק?")) await deleteDoc(doc(db, "tasks", id)); };
+    window.createClass = async () => {
+        const n = document.getElementById('newClassName').value.trim(); if(!n) return;
+        const c = Math.random().toString(36).substring(2, 7).toUpperCase();
+        await addDoc(collection(db, "classes"), { teacherId: teacherKey, name: n, code: c, schedule: {} });
+        document.getElementById('newClassName').value = '';
     };
 
-    window.onload = () => {
-        const u = localStorage.getItem('teacherUser'), p = localStorage.getItem('teacherPass');
-        if(u && p) { document.getElementById('teacherUser').value = u; document.getElementById('teacherPass').value = p; login(); }
+    const days = ["ראשון", "שני", "שלישי", "רביעי", "חמישי"];
+    window.loadSch = async () => {
+        const code = document.getElementById('schClass').value; if(!code) return;
+        const snap = await getDocs(query(collection(db, "classes"), where("code", "==", code)));
+        const data = snap.docs[0].data().schedule || {};
+        document.getElementById('schEditor').innerHTML = days.map((day, i) => `
+            <div style="margin-top:15px; background:rgba(255,255,255,0.05); padding:15px; border-radius:20px;">
+                <strong>יום ${day}</strong><div id="day-${i}"></div>
+                <button onclick="addRow(${i})" style="width:auto; padding:5px 12px; font-size:11px; margin-top:10px;">+ הוסף שיעור</button>
+            </div>`).join('');
+        days.forEach((_, i) => (data[`day${i}`] || [{subject:'',time:''}]).forEach(l => addRow(i, l.subject, l.time)));
     };
+    window.addRow = (i, s="", t="") => {
+        const d = document.createElement('div'); d.className="lesson-row";
+        d.innerHTML = `<input type="text" placeholder="מקצוע" class="sub-${i}" value="${s}"><input type="text" placeholder="שעה" class="time-${i}" value="${t}">`;
+        document.getElementById(`day-${i}`).appendChild(d);
+    };
+    window.saveSch = async () => {
+        const code = document.getElementById('schClass').value; const schedule = {};
+        days.forEach((_, i) => {
+            schedule[`day${i}`] = [];
+            const subs = document.getElementsByClassName(`sub-${i}`), times = document.getElementsByClassName(`time-${i}`);
+            for(let j=0; j<subs.length; j++) if(subs[j].value) schedule[`day${i}`].push({subject: subs[j].value, time: times[j].value});
+        });
+        const snap = await getDocs(query(collection(db, "classes"), where("code", "==", code)));
+        await updateDoc(doc(db, "classes", snap.docs[0].id), { schedule }); alert("נשמר!");
+    };
+    window.switchTab = (id, btn) => {
+        document.querySelectorAll('.tab-content').forEach(t => t.classList.add('hidden'));
+        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById(id).classList.remove('hidden'); btn.classList.add('active');
+    };
+    window.logout = () => { localStorage.clear(); location.reload(); };
+    window.onload = () => { if(localStorage.getItem('teacherUser')) login(); };
 </script>
 </body>
 </html>
